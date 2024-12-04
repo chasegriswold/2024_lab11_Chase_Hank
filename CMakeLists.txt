@@ -1,4 +1,4 @@
-# == DO NEVER EDIT THE NEXT LINES for Raspberry Pi Pico VS Code Extension to work ==
+## == DO NEVER EDIT THE NEXT LINES for Raspberry Pi Pico VS Code Extension to work ==
 if(WIN32)
     set(USERHOME $ENV{USERPROFILE})
 else()
@@ -15,41 +15,45 @@ else()
     set(PICO_SDK_PATH lib/pico-sdk)
 endif()
 
-if(DEFINED ENV{FREERTOS_KERNEL_PATH})
-    set(FREERTOS_KERNEL_PATH $ENV{FREERTOS_KERNEL_PATH})
+if(DEFINED ENV{FREERTOS_PATH})
+    set(FREERTOS_PATH $ENV{FREERTOS_PATH})
 else()
-    set(FREERTOS_KERNEL_PATH lib/freertos)
+    set(FREERTOS_PATH lib/freertos)
 endif()
-message("FreeRTOS path: ${FREERTOS_KERNEL_PATH}")
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# ====================================================================================
+if(DEFINED ENV{UNITY_PATH})
+    set(UNITY_PATH $ENV{UNITY_PATH})
+else()
+    set(UNITY_PATH lib/unity)
+endif()
+
+## ====================================================================================
 cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# This sets the variant of the board. We are using the pico_w
+#This sets the variant of the board. We are using the pico_w
 set(PICO_BOARD pico_w CACHE STRING "Board type")
 
-# This imports the Pico SDK (must be included before the project)
+#This imports the Pico SDK (must be included before the project)
 include(${PICO_SDK_PATH}/pico_sdk_init.cmake)
 
-# This imports the library configuration for FreeRTOS
-include(${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
+#This imports the library configuration for FreeRTOS
+include(${FREERTOS_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
 
-# This defines your project name, you can name it anything you want.
+#This defines your project name, you can name it anything you want.
 project(lab11 C CXX ASM)
 
-# These are some macros from the pico SDK that do some setup.
+#These are some macros from the pico SDK that do some setup.
 pico_sdk_init()
 
-# This sets a preprocessor value for use in our code.
+#This sets a preprocessor value for use in our code.
 add_compile_definitions(
     PICO_ENTER_USB_BOOT_ON_EXIT=1
 )
 
-# This is where your project header files are located.
+#This is where your project header files are located.
 include_directories(${CMAKE_SOURCE_DIR}/include)
 add_subdirectory(server)
